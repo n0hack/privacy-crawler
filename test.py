@@ -89,7 +89,7 @@ for blogger_id in blogger_list:
                         article_addr = 'https://cafe.naver.com/ca-fe/ArticleRead.nhn?clubid=10050146&page=1&inCafeSearch=true&searchBy=0&includeAll=&exclude=&include=&exact=&searchdate=all&media=0&sortBy=date&articleid={0}&referrerAllArticles=true'.format(article_id)
                         driver.get(url=article_addr)
                         driver.switch_to.frame('cafe_main') # iframe switching
-                        time.sleep(2)
+                        time.sleep(1)
                         bs = BeautifulSoup(driver.page_source, 'html.parser')
 
                         intext_tag = bs.select('.article_container')[0].get_text()
@@ -97,12 +97,12 @@ for blogger_id in blogger_list:
 
                         # 번호 발견
                         if len(phone) > 0:
-                            print('들오긴 함')
                             for n in phone:
                                 edit_n = re.sub('\s+', '-', n)
                                 edit_n = re.sub('-', '', edit_n)
                                 print('{0} 블로거의 전화번호: {1}'.format(blogger, edit_n))
                                 real_num = real_num + 1
+                                time.sleep(2)
                                 break
                             break
                     except:
