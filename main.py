@@ -1,7 +1,7 @@
 import sys
-import asyncio
 from window import Ui_MainWindow
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 # Main Frame
 if __name__ == '__main__':

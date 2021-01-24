@@ -1,4 +1,5 @@
 import re
+import os
 import time
 import pyperclip
 import chromedriver_autoinstaller
@@ -46,11 +47,12 @@ class Thread(QtCore.QThread):
         self.list_reset.emit()
 
         # Selenium Driver 생성
-        chromedriver_autoinstaller.install()
+        chromedriver_autoinstaller.install(cwd=True)
+        time.sleep(1)
         options = webdriver.ChromeOptions()
-        options.add_argument('headless')
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--ignore-ssl-errors')
+        options.add_argument('--app=http://www.google.com')
         driver = webdriver.Chrome(chrome_options=options)
 
         # 네이버 로그인
@@ -108,7 +110,7 @@ class Thread(QtCore.QThread):
                                 time.sleep(1)
                                 bs = BeautifulSoup(driver.page_source, 'html.parser')
                                 intext_tag = bs.select('.article_container')[0].get_text()
-                                phone = re.compile(r'(?:010|01o|o10|o1o|0l0|0lo|ol0|olo)\s*-{0,1}\s*\w{4}\s*-{0,1}\s*\w{4}').findall(intext_tag)
+                                phone = re.compile(r'(?:010|01o|o10|o1o|0l0|0lo|ol0|olo)\s*-{0,1}\s*\d{4}\s*-{0,1}\s*\d{4}').findall(intext_tag)
 
                                 # 번호 발견
                                 if len(phone) > 0:
@@ -136,3 +138,4 @@ class Thread(QtCore.QThread):
 
         # Selenium Close
         driver.close()
+        os.system('taskkill /f /im chromedriver.exe')
