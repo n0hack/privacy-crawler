@@ -1,8 +1,47 @@
-# import re
-# from bs4 import BeautifulSoup
+import re
+# # from bs4 import BeautifulSoup
 
-s = '01000000000'
-print(s[:3] + '-' + s[3:7] + '-' + s[7:])
+# import pickle
+# import os.path
+
+# user_info = ['nohack-', 'wjswlehf2!']
+
+
+# # with open('lib.dll', 'rb') as f:
+# #     user_info = pickle.load(f)
+
+# with open('lib.dll', 'wb') as f:
+#     pickle.dump(user_info, f)
+
+
+s = '''
+'최신순'
+    '010 - 0000       -0o00',
+    '01o00000000',
+    'o1000000000',
+    '-o1o00000000',
+    '0l000000000',
+    'ㅡ0lo00000000',
+    '-ol000000000',
+    '-olo00000000',
+    'ㅡ010 - 5646 - 0941'
+'''
+
+phone = re.compile('(?:010|01o|o10|o1o|0l0|0lo|ol0|olo)\s*-{0,1}\s*\w{4}\s*-{0,1}\s*\w{4}').findall(s)
+print(phone)
+# p = re.compile('(?:010|01o|o10|o1o|0l0|0lo|ol0|olo)\s*-{0,1}\s*\w{4}\s*-{0,1}\s*\w{4}')
+# p2 = re.compile('최신순')
+# m = re.search(p, s)
+# m2 = re.search(p2, s)
+# print(s)
+# print(m.start(), m2.start())
+# for p in phone:
+#     p = re.sub('\s', '', p)
+#     p = re.sub('-', '', p)
+#     p = re.sub('l', '1', p)
+#     p = re.sub('o', '0', p)
+#     p = p[:3] + '-' + p[3:7] + '-' + p[7:]
+#     print(p)
 
 
 # f = open('test.html', 'r', encoding='utf-8')

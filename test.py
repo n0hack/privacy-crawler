@@ -20,17 +20,20 @@ blogger_list = f.read().splitlines()
 
 # Selenium Driver 생성
 chromedriver_autoinstaller.install()
-driver = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--ignore-ssl-errors')
+driver = webdriver.Chrome(chrome_options=options)
 
 # 네이버 로그인
 driver.get(url='https://www.naver.com/')
 driver.find_element_by_xpath('//*[@id="account"]/a').click()
 time.sleep(1)
 pyperclip.copy(config.NAVER_ID)
-driver.find_element_by_xpath('//*[@id="id"]').send_keys(Keys.COMMAND, 'v')
+driver.find_element_by_xpath('//*[@id="id"]').send_keys(Keys.CONTROL, 'v')
 time.sleep(1)
 pyperclip.copy(config.NAVER_PW)
-driver.find_element_by_xpath('//*[@id="pw"]').send_keys(Keys.COMMAND, 'v')
+driver.find_element_by_xpath('//*[@id="pw"]').send_keys(Keys.CONTROL, 'v')
 time.sleep(1)
 driver.find_element_by_xpath('//*[@id="log.login"]').click()
 time.sleep(2)
@@ -93,16 +96,21 @@ for blogger_id in blogger_list:
                         bs = BeautifulSoup(driver.page_source, 'html.parser')
 
                         intext_tag = bs.select('.article_container')[0].get_text()
-                        phone = re.compile('010\s*-{0,1}\s*\d{4}\s*-{0,1}\s*\d{4}').findall(intext_tag)
+                        phone = re.compile('(?:010|01o|o10|o1o|0l0|0lo|ol0|olo)\s*-{0,1}\s*\w{4}\s*-{0,1}\s*\w{4}').findall(intext_tag)
+                        # phone = re.compile('010\s*-{0,1}\s*\d{4}\s*-{0,1}\s*\d{4}').findall(intext_tag)
 
                         # 번호 발견
                         if len(phone) > 0:
                             for n in phone:
-                                edit_n = re.sub('\s+', '-', n)
-                                edit_n = re.sub('-', '', edit_n)
-                                print('{0} 블로거의 전화번호: {1}'.format(blogger, edit_n))
+                                # edit_n = re.sub('\s+', '-', n)
+                                # edit_n = re.sub('-', '', edit_n)
+                                n = re.sub('\s', '', n)
+                                n = re.sub('-', '', n)
+                                n = re.sub('l', '1', n)
+                                n = re.sub('o', '0', n)
+                                n = n[:3] + '-' + n[3:7] + '-' + n[7:]
+                                print('{0} 블로거의 전화번호: {1}'.format(blogger_id, n))
                                 real_num = real_num + 1
-                                time.sleep(2)
                                 break
                             break
                     except:
